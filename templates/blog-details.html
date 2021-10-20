@@ -1,0 +1,174 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+{% block extra_css %}
+    <style>
+    body{margin-top:20px;}
+
+.comment-wrapper .panel-body {
+    max-height:650px;
+    overflow:auto;
+}
+
+.comment-wrapper .media-list .media img {
+    width:64px;
+    height:64px;
+    border:2px solid #e5e7e8;
+}
+
+.comment-wrapper .media-list .media {
+    border-bottom:1px dashed #efefef;
+    margin-bottom:25px;
+}
+    </style>
+{% endblock %}
+{% block content %}
+
+    <!-- Blog Details Hero Begin -->
+    <section class="blog-hero spad">
+        <div class="container">
+            <div class="row d-flex justify-content-center">
+                <div class="col-lg-9 text-center">
+                    <div class="blog__hero__text">
+                        <h2>{{ object.title }}</h2>
+                        <ul>
+                            <li>By {{ object.author }}</li>
+                            <li>{{ object.created_at | date:'F d, Y' }}</li>
+                            <li>8 Comments</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Blog Details Hero End -->
+
+    <!-- Blog Details Section Begin -->
+    <section class="blog-details spad">
+        <div class="container">
+            <div class="row d-flex justify-content-center">
+                <div class="col-lg-12">
+                    <div class="blog__details__pic">
+                        <img src="{{ object.banner.url  }}" alt="">
+                    </div>
+                </div>
+                <div class="col-lg-8">
+                    <div class="blog__details__content">
+                        <div class="blog__details__share">
+                            <span>share</span>
+                            <ul>
+                                <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                                <li><a href="#" class="twitter"><i class="fa fa-twitter"></i></a></li>
+                                <li><a href="#" class="youtube"><i class="fa fa-youtube-play"></i></a></li>
+                                <li><a href="#" class="linkedin"><i class="fa fa-linkedin"></i></a></li>
+                            </ul>
+                        </div>
+                        <div class="blog__details__text">
+                            <p>Hydroderm is the highly desired anti-aging cream on the block. This serum restricts the
+                                occurrence of early aging sings on the skin and keeps the skin younger, tighter and
+                                healthier. It reduces the wrinkles and loosening of skin. This cream nourishes the skin
+                                and brings back the glow that had lost in the run of hectic years.</p>
+                            <p>The most essential ingredient that makes hydroderm so effective is Vyo-Serum, which is a
+                                product of natural selected proteins. This concentrate works actively in bringing about
+                                the natural youthful glow of the skin. It tightens the skin along with its moisturizing
+                                effect on the skin. The other important ingredient, making hydroderm so effective is
+                                “marine collagen” which along with Vyo-Serum helps revitalize the skin.</p>
+                        </div>
+                        <div class="blog__details__text">
+                            {{ object.content | safe }}
+                        </div>
+                        <div class="blog__details__option">
+                            <div class="row">
+                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                    <div class="blog__details__author">
+                                        <div class="blog__details__author__pic">
+                                            <img src="{{ object.author.image.url }}" alt="{{ object.author }}">
+                                        </div>
+                                        <div class="blog__details__author__text">
+                                            <h5>{{ object.author.name }}</h5>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                    <div class="blog__details__tags">
+                                        {% for tag in object.tags.all %}
+                                        <a href="{% url 'posts:list' %}?tag={{ tag.title }}">
+                                        #{{ tag.title }}
+                                        </a>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="blog__details__btns">
+                            <div class="row">
+                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                    {% if object.get_prev%}
+                                    <a href="{% url 'posts:detail' pk=object.get_prev.pk %}" class="blog__details__btns__item">
+                                        <p><span class="arrow_left"></span> Previous Pod</p>
+                                        <h5>{{ object.get_prev.title }}</h5>
+                                    </a>
+                                    {% endif %}
+                                </div>
+                                {% if object.get_next %}
+                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                    <a href="{% url 'posts:detail' pk=object.get_next.pk %}"  class="blog__details__btns__item blog__details__btns__item--next">
+                                        <p>Next Pod <span class="arrow_right"></span></p>
+                                        <h5>{{ object.get_next.title }}</h5>
+                                    </a>
+                                {% endif %}
+                                </div>
+                            </div>
+                        </div>
+        <div id="comment-section" class="row bootstrap snippets bootdeys">
+            <div class="col-md-12 col-sm-12">
+                <div class="comment-wrapper">
+                    <div class="panel panel-info">
+                        <div class="panel-body">
+                            <ul class="media-list">
+                                {% for comment in object.get_comments %}
+                                <li class="media">
+                                    <div class="media-body">
+                                        <span class="text-muted pull-right">
+                                            <small class="text-muted">{{ comment.created_at|timesince }}</small>
+                                        </span>
+                                        <strong>{{ comment.name }}</strong>
+                                        <p>
+                                            {{ comment.comment }}
+                                        </p>
+                                    </div>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+        </div>
+        </div>
+                        <div id="comment-section" class="blog__details__comment">
+                            <h4>Leave A Comment</h4>
+                            <form method="post" action="{% url 'posts:comment' pk=object.pk%}#comment-section">
+                                {% csrf_token %}
+                                <div class="row">
+                                    <div class="col-lg-4 col-md-4">
+                                        <input name="name" type="text" placeholder="Name">
+                                    </div>
+                                    <div class="col-lg-4 col-md-4">
+                                        <input name="email" type="text" placeholder="Email">
+                                    </div>
+                                    <div class="col-lg-4 col-md-4">
+                                        <input name="phone" type="text" placeholder="Phone">
+                                    </div>
+                                    <div class="col-lg-12 text-center">
+                                        <textarea name="comment" placeholder="Comment"></textarea>
+                                        <button type="submit" class="site-btn">Post Comment</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Blog Details Section End -->
+{% endblock %}

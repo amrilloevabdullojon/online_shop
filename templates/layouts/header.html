@@ -1,0 +1,144 @@
+{% load static %}
+{% load i18n %}
+{% load mytags %}
+    <div class="offcanvas-menu-overlay"></div>
+    <div class="offcanvas-menu-wrapper">
+        <div class="offcanvas__option">
+            <div class="offcanvas__links">
+                {% if request.user.is_authenticated %}
+                <a href="{% url 'auth_logout' %}">{% trans 'Log Out' %}</a>
+                 {% else %}
+                 <a href="{% url 'auth_login' %}">{% trans 'Sign in ' %}</a>
+                {% endif %}
+            </div>
+            <div class="offcanvas__top__hover">
+                <span>EN <i class="arrow_carrot-down"></i></span>
+                <ul>
+                    <li>RU</li>
+                    <li>UZ</li>
+                </ul>
+            </div>
+        </div>
+        <div class="offcanvas__nav__option">
+            <a href="#" class="search-switch">
+                <img src="{% static 'img/icon/search.png'%}" alt="">
+            </a>
+            <a href="#">
+                <img src="{% static 'img/icon/heart.png'%}" alt="">
+            </a>
+            {% if product|in_cart:request %}
+            <a href="#">
+                <img src="{% static 'img/icon/cart.png'%}" alt=""> <span>{% get_cart_count request %}</span>
+            </a>
+            {% else %}
+                  <a href="#">
+                <img src="{% static 'img/icon/cart.png'%}" alt=""> <span>{% get_cart_count request %}</span>
+                v </a>
+             {% endif %}
+            <div class="price">$0.00</div>
+        </div>
+        <div id="mobile-menu-wrap"></div>
+        <div class="offcanvas__text">
+            <p>{% trans 'Free shipping, 30-day return or refund guarantee.' %}</p>
+        </div>
+    </div>
+
+     <header class="header">
+        <div class="header__top">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 col-md-7">
+                    </div>
+                    <div class="col-lg-6 col-md-5">
+                        <div class="header__top__right">
+                            <div class="header__top__links">
+                                {% if request.user.is_authenticated %}
+                                    <a href="{% url 'profile:home' %}">{% trans 'Profile' %}</a>
+                                    <a href="#">History</a>
+                                    <a href="{% url 'auth_logout' %}">{% trans 'Log Out' %}</a>
+                                {% else %}
+                                        <a href="{% url 'auth_login' %}">{% trans 'Sign in ' %}</a>
+                                {% endif %}
+                            </div>
+                            <div class="header__top__hover">
+                                <span>
+                                   {% get_current_language as lang %}
+                                    {% get_available_languages as langs %}
+                                    {{ lang }}
+                                    <i class="arrow_carrot-down"></i>
+                                </span>
+                                <ul>
+                                    {% for i in langs %}
+                                        {% if i.0 != lang %}
+                                            <li>
+                                                <a style="text-decoration: none;" href="{% get_url_lang request i.0 %}">{{ i.0|upper }}</a>
+                                            </li>
+                                        {% endif %}
+                                    {% endfor %}
+
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-3">
+                    <div class="header__logo">
+                        <a href="{% url 'pages:home' %}">
+                            <img src="{% static 'img/logo.png'%}" alt="">
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6">
+                    <nav class="header__menu mobile-menu">
+                        <ul>
+                            <li class="{% if request.path == '/'%} active{% endif %} ">
+                                <a href="{% url 'pages:home' %}">{% trans 'Home' %}</a>
+                            </li>
+                            <li class="{% if request.path == '/products/'%}active{% endif %}">
+                                <a href="{% url 'products:list' %}">{% trans 'Product' %}</a>
+                            </li>
+                            <li class="{% if request.path == '/blog/'%}active{% endif %}">
+                                <a href="{% url 'posts:list' %}">{% trans 'Blog' %}</a>
+                            </li>
+                            <li class="{% if request.path == '/about/'%}active{% endif %}">
+                                <a href="{% url 'pages:about' %}">{% trans 'About' %}</a>
+                            </li>
+                            <li class="{% if request.path == '/contact/'%}active{% endif %}">
+                                <a href="{% url 'pages:contact' %}">{% trans 'Contacts' %}</a>
+                            </li>
+
+{#                            <li>#}
+{#                                <a href="#">Pages</a>#}
+{#                                <ul class="dropdown">#}
+{#                                    <li><a href="{% url 'pages:home' %}">About Us</a></li>#}
+{#                                    <li><a href="./product.html">Shop Details</a></li>#}
+{#                                    <li><a href="./shopping-cart.html">Shopping Cart</a></li>#}
+{#                                    <li><a href="./checkout.html">Check Out</a></li>#}
+{#                                    <li><a href="./blog-details.html">Blog Details</a></li>#}
+{#                                </ul>#}
+{#                            </li>#}
+                        </ul>
+                    </nav>
+                </div>
+                <div class="col-lg-3 col-md-3">
+                    <div class="header__nav__option">
+                        <a href="#" class="search-switch">
+                            <img src="{% static 'img/icon/search.png'%}" alt="">
+                        </a>
+                        <a href="{% url 'products:wishlist' %}">
+                            <img src="{% static 'img/icon/heart.png' %}" alt="">
+                        </a>
+                        <a href="#">
+                            <img src="{% static 'img/icon/cart.png'%}" alt=""> <span>{% get_cart_count request %}</span>
+                        </a>
+                        <div class="price">$0.00</div>
+                    </div>
+                </div>
+            </div>
+            <div class="canvas__open"><i class="fa fa-bars"></i></div>
+        </div>
+    </header>

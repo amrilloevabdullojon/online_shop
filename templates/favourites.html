@@ -1,0 +1,99 @@
+{% extends 'layouts/base.html' %}
+{% load mytags %}
+{% load static %}
+{% block extra_css %}
+    <style>
+    a:hover
+    {
+        cursor: pointer;
+    }
+    .a-active
+    {
+        color: #111 !important;
+    }
+    .b-active
+    {
+        color: #fff !important;
+        background: #111 !important;
+    }
+
+    </style>
+{% endblock %}
+{% block content %}
+    <!-- Breadcrumb Section Begin -->
+    <section class="breadcrumb-option">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb__text">
+                        <h4>Shop</h4>
+                        <div class="breadcrumb__links">
+                            <a href="{% url 'pages:home' %}">Home</a>
+                            <span>Favourites</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Breadcrumb Section End -->
+
+    <!-- Shop Section Begin -->
+    <section class="shop spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="row">
+                        {% for product in object_list %}
+                        <div class="col-lg-3 col-md-4 col-sm-4">
+                            {% include 'layouts/product_block.html' %}
+                        </div>
+                {% endfor %}
+
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="product__pagination">
+                                {% for page in page_obj.paginator.page_range %}
+                                <a {% if  page == page_obj.number %}class="active"{% endif %} onclick="addUrlParameter('page', {{ page }})">{{ page }}</a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Shop Section End -->
+    {% endblock %}
+
+{% block extra_js %}
+    <script>
+
+        function addUrlParameter(name, value) {
+            let searchParams = new URLSearchParams(window.location.search)
+            if (['cat', 'brand', 'tag', 'size', 'color'].includes(name) ){
+                searchParams.delete('page');
+            }
+            if (searchParams.has(name) && searchParams.get(name)=== value){
+                searchParams.delete(name);
+            }
+            else{
+               searchParams.set(name, value)
+            }
+
+            window.location.search = searchParams.toString()
+
+        }
+{#        function addUrlParameter(name, value) {#}
+{#                    let searchParams = new URLSearchParams(window.location.search)#}
+{#                    if (searchParams.has(name) && searchParams.get(name) === value) {#}
+{#                        searchParams.delete(name)#}
+{#                    } else {#}
+{#                        searchParams.set(name, value)#}
+{#                    }#}
+{#                    window.location.search = searchParams.toString()#}
+{#                }#}
+    </script>
+{% endblock %}

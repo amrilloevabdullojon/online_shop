@@ -1,0 +1,50 @@
+{% load mytags %}
+{% load static %}
+{% load i18n %}
+<div class="product__item {% if product.is_discount %}{% endif %}">
+
+                                <div class="product__item__pic set-bg" data-setbg="{{ product.image.url }}">
+                                   {% if product.is_discount %}
+                                        <span class="label">Sale</span>
+                                    {% endif %}
+                                    {% if product.is_new %}
+                                    <span class="label {% if product.is_discount %}mt-4{% endif %}">New</span>
+                                    {% endif %}
+                                    <ul class="product__hover">
+                                        <li>
+                                            <a href="{% url 'products:create_wishlist' pk=product.pk %}?next={{ request.path }}?{{ request.GET.urlencode }}">
+                                                <img src="{% get_heart_icon request product %}" alt="">
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#"><img src="{% static 'img/icon/compare.png'%}" alt=""> <span>Compare</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="{% url 'products:detail' pk=product.pk %}">
+                                                <img src="{% static 'img/icon/search.png'%}" alt="">
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="product__item__text">
+                                    <h6>{{ product.title }}</h6>
+                                    <a href="{% url 'products:add-cart' pk=product.pk%}?next={{ request.path }}?{{ request.GET.urlencode }}" class="add-cart">+ Add To Cart</a>
+                                    <div class="rating">
+                                        <i class="fa fa-star-o"></i>
+                                        <i class="fa fa-star-o"></i>
+                                        <i class="fa fa-star-o"></i>
+                                        <i class="fa fa-star-o"></i>
+                                        <i class="fa fa-star-o"></i>
+                                    </div>
+                                    <h5>${{ product.real_price }}{% if product.is_discount %} <span class="small" ><strike>{{ product.price }}</strike></span>{% endif %}</h5>
+                                    <div class="product__color__select">
+                                        {% for color in product.color.all %}
+                                            <label style="background:{{ color.code }}">
+                                                <input type="radio">
+                                            </label>
+                                        {% endfor %}
+
+                                    </div>
+                                </div>
+                            </div>

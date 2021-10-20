@@ -1,0 +1,41 @@
+{% extends 'registration/registration_base.html' %}
+{% load i18n %}
+{% block content %}
+            <div class="form-block mx-auto">
+              <div class="text-center mb-5">
+                <h3 class="text-uppercase">{% trans 'Registration' %}</h3>
+              </div>
+              <form method="POST">
+                  {% csrf_token %}
+                <div class="form-group first">
+                  <label for="username">{% trans 'Username' %}</label>
+                  <input name="username" type="text" class="form-control" placeholder="Username" id="username">
+                </div>
+
+                  <div class="form-group first">
+                  <label for="email">{% trans 'E-mail' %}</label>
+                  <input name="email" type="text" class="form-control" placeholder="your-email@gmail.com" id="username">
+                </div>
+
+                  <div class="form-group last mb-3">
+                  <label for="password">{% trans 'Password' %}</label>
+                  <input name="password1" type="password" class="form-control" placeholder="Password" id="password">
+                </div>
+                  <div class="form-group last mb-3">
+                  <label for="password">{% trans 'Confirm Password' %}</label>
+                  <input name="password2"  type="password" class="form-control" placeholder="Confirm Password" id="password">
+                </div>
+                <div class="row">
+                    <div class="col-4">
+                        <a href="{% url 'auth_login' %}">
+                            <button type="button" class='btn btn-info w-100'>{% trans 'Sign in' %}</button>
+                        </a>
+                    </div>
+                    <div class="col-8">
+                     <input type="submit" value="Sign Up" class="btn btn-primary w-100  ">
+                    </div>
+                </div>
+              </form>
+            </div>
+
+{% endblock %}
